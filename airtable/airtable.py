@@ -165,8 +165,13 @@ class Airtable(object):
         return [{"fields": record} for record in records]
 
     def _process_response(self, response):
-        """ Pass through exception so we can check status"""
-        response.raise_for_status()
+        """ Pass through exception so we can check status, inject error"""
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as exc:
+            ## TODO should inject only in certain error codes?
+            exc.args = (*exc.args, exc.response.json())
+            raise
         return response.json()
 
     def record_url(self, record_id):
