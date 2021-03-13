@@ -12,6 +12,7 @@ Note:
 
 """  #
 import requests
+import requests
 
 
 class AirtableAuth(requests.auth.AuthBase):
